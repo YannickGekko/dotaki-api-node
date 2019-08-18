@@ -82,7 +82,10 @@ volumes: [
                     cd publish/release-dota
                     git add values.yaml
                     env
-                    git commit -m " Jenkins Job api-node-gekko, Build number :  $BUILD_NUMBER"
+                    git config --global user.email "jenkins@example.com"
+                    git config --global user.name "jenkins"
+
+                    git commit -m " Jenkins Job $JOB_NAME , Build number :  $BUILD_NUMBER"
                     git push
                 '''
             }
