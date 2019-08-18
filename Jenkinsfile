@@ -1,7 +1,7 @@
 podTemplate(containers: [
   containerTemplate(name: 'docker', image: 'docker:1.11', command: 'cat', ttyEnabled: true),
   containerTemplate(name: 'node', image: 'node:8-alpine', command: 'cat', ttyEnabled: true),
-  containerTemplate(name: 'aws', image: 'xueshanf/awscli:latest', command: 'cat', ttyEnabled: true)
+  containerTemplate(name: 'aws', image: 'xueshanf/awscli:3.10-alpine', command: 'cat', ttyEnabled: true)
 ], 
 volumes: [
   hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
