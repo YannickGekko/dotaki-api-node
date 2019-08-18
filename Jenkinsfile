@@ -58,25 +58,28 @@ volumes: [
                   '''
               }
             }
-            stage("commit for deploy") {
-                environment {
-                    GIT_AUTH = credentials('gitCredLoick')
+            stage('commit for deploy'){
+                sh '''
+                '''
+                container('yq'){
+                    sh '''
+                        cd dotaki-api-node           
+                        . ./load_env.sh
+                        cd ..
+                        cd publish/release-dota
+                        yq w -i values.yaml image.repository $IMAGE
+                    '''
                 }
-                steps {
-                    sh('''
-                    cd dotaki-api-node           
-                    . ./load_env.sh
-                    cd ..
-                    mkdir publish
-                    cd publish
-                    git clone https://github.com/loick-gekko/release-dota.git
-                    cd release-dota
-                    git checkout node-workers
-                    git config --local credential.helper "!f() { echo username=\\$GIT_AUTH_USR; echo password=\\$GIT_AUTH_PSW; }; f"
-                    git add values.yaml
-                    git commit -m " Jenkins Job $JOB_NAME , Build number :  $BUILD_NUMBER"
-                    git push origin origin:node-workers
-                ''')
+                def scmvars=steps.checkout(globals.scm)
+                if (scmvars.GIT_AUTHOR_NAME && scmvars.GIT_AUTHOR_EMAIL) {
+                    steps.sh(script:"""
+                                cd publish/release-dota
+                                git config user.name '${scmvars.GIT_AUTHOR_NAME}'
+                                git config user.email '${scmvars.GIT_AUTHOR_EMAIL}'
+                                git add values.yaml
+                                git commit -m " Jenkins Job $JOB_NAME , Build number :  $BUILD_NUMBER"
+                                git push origin origin:node-workers
+							""")
                 }
             }
             stage('Generate Report'){
