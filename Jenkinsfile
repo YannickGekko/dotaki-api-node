@@ -1,8 +1,9 @@
 podTemplate(containers: [
   containerTemplate(name: 'docker', image: 'docker:1.11', command: 'cat', ttyEnabled: true),
   containerTemplate(name: 'node', image: 'node:8-alpine', command: 'cat', ttyEnabled: true),
-  containerTemplate(name: 'aws', image: 'xueshanf/awscli:3.10-alpine', command: 'cat', ttyEnabled: true)
-], 
+  containerTemplate(name: 'aws', image: 'xueshanf/awscli:3.10-alpine', command: 'cat', ttyEnabled: true),
+  containerTemplate(name: 'yq', image: 'mikefarah/yq:2.4.0', command: 'cat', ttyEnabled: true)
+],
 volumes: [
   hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
 ]){
@@ -56,6 +57,31 @@ volumes: [
                   docker push $IMAGELATEST
                   '''
               }
+            }
+            stage('commit for deploy'){
+                sh '''
+                  cd dotaki-api-node           
+                  . ./load_env.sh
+                  cd ..
+                  mkdir publish
+                  cd publish
+                  git clone https://github.com/loick-gekko/release-dota.git
+                  cd release-dota
+                  git checkout node-workers
+                '''
+                container('yq'){
+                    sh '''
+                        cd publish/release-dota
+                        yq w -i values.yaml image.repository $IMAGE
+                    '''
+                }
+                sh '''
+                    cd publish/release-dota
+                    git add values.yaml
+                    env
+                    git commit -m " Jenkins Job api-node-gekko, Build number :  $BUILD_NUMBER"
+                    git push
+                '''
             }
             stage('Generate Report'){
                   sh '''
