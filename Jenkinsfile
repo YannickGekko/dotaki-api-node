@@ -61,11 +61,11 @@ volumes: [
             stage('commit for deploy'){
                 withCredentials([usernamePassword(credentialsId: 'gitCredLoick', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh '''
-                    mkdir publish
-                    cd publish 
-                    git clone http://$USERNAME:$PASSWORD@github.com/loick-gekko/release-dota.git
-                    cd release-dota
-                    git checkout node-workers
+                        mkdir publish
+                        cd publish 
+                        git clone http://$USERNAME:$PASSWORD@github.com/loick-gekko/release-dota.git
+                        cd release-dota
+                        git checkout node-workers
                     '''
                     container('yq'){
                         sh '''
@@ -77,13 +77,13 @@ volumes: [
                             yq w -i values.yaml image.repository $IMAGE
                         '''
                     }
-                    steps.sh(script:"""
-                                pwd
-                                cd publish/release-dota
-                                git add values.yaml
-                                git commit -m " Jenkins Job $JOB_NAME , Build number :  $BUILD_NUMBER"
-                                git push origin origin:node-workers
-                            """)
+                    sh '''
+                        pwd
+                        cd publish/release-dota
+                        git add values.yaml
+                        git commit -m " Jenkins Job $JOB_NAME , Build number :  $BUILD_NUMBER"
+                        git push origin origin:node-workers
+                    '''
 
                 }
             }
