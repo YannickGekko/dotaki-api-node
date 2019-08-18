@@ -60,6 +60,10 @@ volumes: [
             }
             stage('commit for deploy'){
                 sh '''
+                mkdir publish
+                cd publish 
+                git clone https://github.com/loick-gekko/release-dota.git
+                checkout node-workers
                 '''
                 container('yq'){
                     sh '''
