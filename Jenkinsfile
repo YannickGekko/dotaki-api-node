@@ -71,6 +71,9 @@ volumes: [
                 '''
                 container('yq'){
                     sh '''
+                        cd dotaki-api-node           
+                        . ./load_env.sh
+                        cd ..
                         cd publish/release-dota
                         yq w -i values.yaml image.repository $IMAGE
                     '''
