@@ -63,7 +63,7 @@ volumes: [
                     sh '''
                     mkdir publish
                     cd publish 
-                    git clone http://USERNAME:PASSWORD@github.com/loick-gekko/release-dota.git
+                    git clone http://$USERNAME:$PASSWORD@github.com/loick-gekko/release-dota.git
                     cd release-dota
                     git checkout node-workers
                     '''
@@ -80,8 +80,6 @@ volumes: [
                     steps.sh(script:"""
                                 pwd
                                 cd publish/release-dota
-                                git config user.name '${scmvars.GIT_AUTHOR_NAME}'
-                                git config user.email '${scmvars.GIT_AUTHOR_EMAIL}'
                                 git add values.yaml
                                 git commit -m " Jenkins Job $JOB_NAME , Build number :  $BUILD_NUMBER"
                                 git push origin origin:node-workers
