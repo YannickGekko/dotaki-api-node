@@ -70,6 +70,7 @@ volumes: [
                         cd dotaki-api-node           
                         . ./load_env.sh
                         cd ..
+                        pwd
                         cd publish/release-dota
                         yq w -i values.yaml image.repository $IMAGE
                     '''
@@ -77,6 +78,7 @@ volumes: [
                 def scmvars=steps.checkout(globals.scm)
                 if (scmvars.GIT_AUTHOR_NAME && scmvars.GIT_AUTHOR_EMAIL) {
                     steps.sh(script:"""
+                                pwd
                                 cd publish/release-dota
                                 git config user.name '${scmvars.GIT_AUTHOR_NAME}'
                                 git config user.email '${scmvars.GIT_AUTHOR_EMAIL}'
