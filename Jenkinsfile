@@ -90,7 +90,7 @@ volumes: [
                         rm -f values.yaml && mv ../values.yaml .
                         git add values.yaml
                         git commit -m " Jenkins Job $JOB_NAME , Build number :  $BUILD_NUMBER"
-                        git push origin origin:node-workers
+                        git push --set-upstream origin node-workers
                     '''
 
                 }
