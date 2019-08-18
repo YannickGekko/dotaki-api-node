@@ -59,7 +59,7 @@ volumes: [
               }
             }
             stage('commit for deploy'){
-                withCredentials([string(credentialsId: 'gitCredLoick', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: 'gitCredLoick', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh '''
                     mkdir publish
                     cd publish 
