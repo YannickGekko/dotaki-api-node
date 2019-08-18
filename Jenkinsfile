@@ -10,7 +10,7 @@ volumes: [
         withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS_Dotaki_Preprod_Cred']]){
           stage('Build Image'){
               sh '''
-              git clone https://github.com/YannickGekko/dotaki-api-node.git
+              git clone https://github.com/loick-gekko/dotaki-api-node.git
               cd dotaki-api-node
               GIT_COMMIT="$(git rev-parse HEAD)"
               echo '###### Git START ########'
