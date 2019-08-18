@@ -22,6 +22,8 @@ volumes: [
               echo 'export IMAGE=133845867148.dkr.ecr.eu-west-1.amazonaws.com/api-node-gekko-jenkins:'$GIT_COMMIT > ./load_env.sh
               echo 'export IMAGELATEST=133845867148.dkr.ecr.eu-west-1.amazonaws.com/api-node-gekko-jenkins:latest' >> ./load_env.sh
               echo 'export GIT_COMMIT='$GIT_COMMIT >> ./load_env.sh
+              echo 'export REPO=133845867148.dkr.ecr.eu-west-1.amazonaws.com/api-node-gekko-jenkins' >> ./load_env.sh
+
               chmod 750 ./load_env.sh
               '''
               container('node'){
@@ -77,7 +79,8 @@ volumes: [
                             cd ..
                             pwd
                             cd publish/release-dota
-                            yq w -i values.yaml image.repository $IMAGE
+                            yq w -i values.yaml image.repository $REPO
+                            yq w -i values.yaml image.tag $GIT_COMMIT
                             mv values.yaml ../values.yaml
                         '''
                     }
