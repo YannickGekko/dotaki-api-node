@@ -81,7 +81,7 @@ volumes: [
                 withCredentials([usernamePassword(credentialsId: 'gitCredLoick', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]){
                     sh('''
                         cd publish/release-dota
-                        git config --local credential.helper "!f() { echo username=\\$GIT_AUTH_USR; echo password=\\$GIT_AUTH_PSW; }; f"
+                        git config --global credential.helper "!f() { echo username=\\$GIT_AUTH_USR; echo password=\\$GIT_AUTH_PSW; }; f"
                         git add values.yaml
                         git commit -m " Jenkins Job $JOB_NAME , Build number :  $BUILD_NUMBER"
                         git push origin origin:node-workers
