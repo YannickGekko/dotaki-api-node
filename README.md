@@ -49,5 +49,3 @@ kubectl -n test-kafka apply -f deploymentNode.yaml
 
 Messages sent in kafka are consumed by consumers 
 
-
-test
