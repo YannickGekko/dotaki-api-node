@@ -82,7 +82,7 @@ volumes: [
                         git config -l
                         cd publish/release-dota
                         git config --global user.name $USERNAME
-                        git config --global user.email "loick-gekko@gekko.fr"
+                        git config --global user.email "jenkins@gekko.fr"
                         git add values.yaml
                         git commit -m " Jenkins Job $JOB_NAME , Build number :  $BUILD_NUMBER"
                         git push origin origin:node-workers
