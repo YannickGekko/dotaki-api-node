@@ -59,25 +59,24 @@ volumes: [
               }
             }
             stage('commit for deploy'){
-                sh '''
-                mkdir publish
-                cd publish 
-                git clone https://github.com/loick-gekko/release-dota.git
-                cd release-dota
-                git checkout node-workers
-                '''
-                container('yq'){
+                withCredentials([string(credentialsId: 'gitCredLoick', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh '''
-                        cd dotaki-api-node           
-                        . ./load_env.sh
-                        cd ..
-                        pwd
-                        cd publish/release-dota
-                        yq w -i values.yaml image.repository $IMAGE
+                    mkdir publish
+                    cd publish 
+                    git clone http://USERNAME:PASSWORD@github.com/loick-gekko/release-dota.git
+                    cd release-dota
+                    git checkout node-workers
                     '''
-                }
-                def scmvars=steps.checkout(globals.scm)
-                if (scmvars.GIT_AUTHOR_NAME && scmvars.GIT_AUTHOR_EMAIL) {
+                    container('yq'){
+                        sh '''
+                            cd dotaki-api-node           
+                            . ./load_env.sh
+                            cd ..
+                            pwd
+                            cd publish/release-dota
+                            yq w -i values.yaml image.repository $IMAGE
+                        '''
+                    }
                     steps.sh(script:"""
                                 pwd
                                 cd publish/release-dota
@@ -86,7 +85,8 @@ volumes: [
                                 git add values.yaml
                                 git commit -m " Jenkins Job $JOB_NAME , Build number :  $BUILD_NUMBER"
                                 git push origin origin:node-workers
-							""")
+                            """)
+
                 }
             }
             stage('Generate Report'){
