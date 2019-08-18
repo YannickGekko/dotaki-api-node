@@ -61,9 +61,12 @@ volumes: [
             stage('commit for deploy'){
                 withCredentials([usernamePassword(credentialsId: 'gitCredLoick', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh '''
+                        git config --global user.name $USERNAME
+                        git config --global user.email "jenkins@gekko.fr"
+
                         mkdir publish
                         cd publish 
-                        git clone http://$USERNAME:$PASSWORD@github.com/loick-gekko/release-dota.git
+                        git clone http://github.com/loick-gekko/release-dota.git
                         cd release-dota
                         git checkout node-workers
                     '''
@@ -75,14 +78,16 @@ volumes: [
                             pwd
                             cd publish/release-dota
                             yq w -i values.yaml image.repository $IMAGE
+                            mv values.yaml ../values.yaml
                         '''
                     }
                     sh '''
                         pwd
                         git config -l
                         cd publish/release-dota
-                        git config --global user.name $USERNAME
-                        git config --global user.email "jenkins@gekko.fr"
+                        
+                        git pull
+                        rm -f values.yaml && mv ../values.yaml .
                         git add values.yaml
                         git commit -m " Jenkins Job $JOB_NAME , Build number :  $BUILD_NUMBER"
                         git push origin origin:node-workers
