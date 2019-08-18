@@ -66,7 +66,7 @@ volumes: [
 
                         mkdir publish
                         cd publish 
-                        git clone http://github.com/loick-gekko/release-dota.git
+                        git clone http://$USERNAME:$PASSWORD@github.com/loick-gekko/release-dota.git
                         cd release-dota
                         git checkout node-workers
                     '''
@@ -95,6 +95,7 @@ volumes: [
 
                 }
             }
+
             stage('Generate Report'){
                   sh '''
                   cd dotaki-api-node           
