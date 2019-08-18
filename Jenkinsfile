@@ -45,9 +45,11 @@ volumes: [
               }
               container('docker'){
                   sh '''
-                  cd dotaki-api-node           
+                  cd dotaki-api-node
                   . ./load_env.sh
                   $(cat DOCKER_LOG)
+				  pwd
+				  ls -al
                   docker build -t $IMAGE .
                   docker tag $IMAGE $IMAGELATEST
                   docker push $IMAGE
