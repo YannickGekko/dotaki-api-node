@@ -1,0 +1,3 @@
+module.exports = {
+  kafka_server: process.env.HOSTKAFKA, 
+};

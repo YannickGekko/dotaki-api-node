@@ -1,0 +1,30 @@
+spec:
+  containers:
+  - command:
+    - "cat"
+    image: "docker:1.11"
+    name: "docker"
+    tty: true
+    volumeMounts:
+    - mountPath: "/var/run/docker.sock"
+      name: "dockersock"
+    - mountPath: "/home/jenkins/agent"
+      name: "workspace-volume"
+      readOnly: false
+    image: "jenkins/jnlp-slave:alpine"
+    name: "jnlp"
+    volumeMounts:
+    - mountPath: "/home/jenkins/agent"
+      name: "workspace-volume"
+      readOnly: false
+  nodeSelector: {}
+  restartPolicy: "Never"
+  volumes:
+  - hostPath:
+      path: "/var/run/docker.sock"
+    name: "dockersock"
+  - emptyDir: {}
+    name: "workspace-volume"
+
+
+

@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-producer
+  namespace: test-kafka
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka-producer
+  template:
+    metadata:
+      labels:
+        app: kafka-producer
+    spec:
+      containers:
+      - env:
+        - name: HOSTKAFKA
+          value: kafka-1-cp-kafka-headless:9092
+        image: 133845867148.dkr.ecr.eu-west-1.amazonaws.com/kafka-producer:0.3
+        name: kafka-producer
+        ports:
+        - containerPort: 8080
+          protocol: TCP
