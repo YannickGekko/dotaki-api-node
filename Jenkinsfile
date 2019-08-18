@@ -63,6 +63,7 @@ volumes: [
                 mkdir publish
                 cd publish 
                 git clone https://github.com/loick-gekko/release-dota.git
+                cd release-dota
                 git checkout node-workers
                 '''
                 container('yq'){
